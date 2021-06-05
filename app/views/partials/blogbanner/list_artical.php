@@ -97,6 +97,12 @@ $show_pagination = $this->show_pagination;
                         <?php $this :: display_page_errors(); ?>
                         <div  class=" animated fadeIn page-content">
                             <div id="blogbanner-list_artical-records">
+                                <style>
+                                    .fluid{
+                                    height:100%;
+                                    width: 100%;
+                                    }
+                                </style>
                                 <?php
                                 if(!empty($records)){
                                 ?>
@@ -111,9 +117,10 @@ $show_pagination = $this->show_pagination;
                                         $counter++;
                                         ?>
                                         <div class="col-lg-3 col-mb-4 col-6">
-                                            <div class="card md-3">
+                                            <div class="card-img md-3">
                                                 <div class="mb-2"> <?php Html :: page_img($data['img'],350,250,1,"articles/view/$rec_id","fluid"); ?></div>
-                                                <div class="mb-2">   <?php echo $data['headline']; ?></div>
+                                                <div class="mb-2 card-body text-captalize text-truncate bold small">   
+                                                <a class="text-dark" herf="<?php print_link("articles/view/$rec_id"); ?>"><?php echo $data['headline']; ?></a></div>
                                             </div>
                                         </div>
                                         <?php 
