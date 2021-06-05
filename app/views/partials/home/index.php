@@ -27,6 +27,13 @@ $current_page = $this->set_current_page_link();
                         ?>
                     </div>
                 </div>
+                <div class="col-12 p-0 comp-grid">
+                    <div class=" ">
+                        <?php  
+                        $this->render_page("blogbanner/list_artical?" , array( 'show_header' => false,'show_pagination' => false )); 
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

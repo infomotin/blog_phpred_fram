@@ -92,20 +92,22 @@ class BlogbannerController extends SecureController{
 		$db = $this->GetModel();
 		$rec_id = $this->rec_id = urldecode($rec_id);
 		$tablename = $this->tablename;
-		$fields = array("id", 
-			"headline", 
-			"img", 
-			"article", 
-			"publisher", 
-			"crt_date", 
-			"upd_date", 
-			"tag");
+		$fields = array("blogbanner.id", 
+			"blogbanner.headline", 
+			"blogbanner.img", 
+			"blogbanner.article", 
+			"blogbanner.publisher", 
+			"user.username AS user_username", 
+			"blogbanner.crt_date", 
+			"blogbanner.upd_date", 
+			"blogbanner.tag");
 		if($value){
 			$db->where($rec_id, urldecode($value)); //select record based on field name
 		}
 		else{
 			$db->where("blogbanner.id", $rec_id);; //select record based on primary key
 		}
+		$db->join("user", "blogbanner.publisher = user.id", "INNER");  
 		$record = $db->getOne($tablename, $fields );
 		if($record){
 			$page_title = $this->view->page_title = "View  Blogbanner";
@@ -192,5 +194,80 @@ class BlogbannerController extends SecureController{
 		}
 		$page_title = $this->view->page_title = "Blogbanner";
 		$this->render_view("blogbanner/banner.php", $data); //render the full page
+	}
+	/**
+     * List page records
+     * @param $fieldname (filter record by a field) 
+     * @param $fieldvalue (filter field value)
+     * @return BaseView
+     */
+	function list_artical($fieldname = null , $fieldvalue = null){
+		$request = $this->request;
+		$db = $this->GetModel();
+		$tablename = $this->tablename;
+		$fields = array("blogbanner.id", 
+			"blogbanner.headline", 
+			"blogbanner.img", 
+			"blogbanner.article", 
+			"blogbanner.publisher", 
+			"user.username AS user_username", 
+			"blogbanner.crt_date", 
+			"blogbanner.upd_date", 
+			"blogbanner.tag");
+		$pagination = $this->get_pagination(8); // get current pagination e.g array(page_number, page_limit)
+		//search table record
+		if(!empty($request->search)){
+			$text = trim($request->search); 
+			$search_condition = "(
+				blogbanner.id LIKE ? OR 
+				blogbanner.headline LIKE ? OR 
+				blogbanner.img LIKE ? OR 
+				blogbanner.article LIKE ? OR 
+				blogbanner.publisher LIKE ? OR 
+				blogbanner.crt_date LIKE ? OR 
+				blogbanner.upd_date LIKE ? OR 
+				blogbanner.tag LIKE ?
+			)";
+			$search_params = array(
+				"%$text%","%$text%","%$text%","%$text%","%$text%","%$text%","%$text%","%$text%"
+			);
+			//setting search conditions
+			$db->where($search_condition, $search_params);
+			 //template to use when ajax search
+			$this->view->search_template = "blogbanner/search.php";
+		}
+		$db->join("user", "blogbanner.publisher = user.id", "INNER");
+		if(!empty($request->orderby)){
+			$orderby = $request->orderby;
+			$ordertype = (!empty($request->ordertype) ? $request->ordertype : ORDER_TYPE);
+			$db->orderBy($orderby, $ordertype);
+		}
+		else{
+			$db->orderBy("blogbanner.id", ORDER_TYPE);
+		}
+		if($fieldname){
+			$db->where($fieldname , $fieldvalue); //filter by a single field name
+		}
+		$tc = $db->withTotalCount();
+		$records = $db->get($tablename, $pagination, $fields);
+		$records_count = count($records);
+		$total_records = intval($tc->totalCount);
+		$page_limit = $pagination[1];
+		$total_pages = ceil($total_records / $page_limit);
+		$data = new stdClass;
+		$data->records = $records;
+		$data->record_count = $records_count;
+		$data->total_records = $total_records;
+		$data->total_page = $total_pages;
+		if($db->getLastError()){
+			$this->set_page_error();
+		}
+		$this->view->report_filename = date('Y-m-d') . '-' . $page_title;
+		$this->view->report_title = $page_title;
+		$this->view->report_layout = "report_layout.php";
+		$this->view->report_paper_size = "A4";
+		$this->view->report_orientation = "portrait";
+		$view_name = (is_ajax() ? "blogbanner/ajax-list_artical.php" : "blogbanner/list_artical.php");
+		$this->render_view($view_name, $data);
 	}
 }

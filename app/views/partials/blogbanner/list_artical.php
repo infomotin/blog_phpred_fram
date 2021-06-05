@@ -15,7 +15,7 @@ $show_header = $this->show_header;
 $show_footer = $this->show_footer;
 $show_pagination = $this->show_pagination;
 ?>
-<section class="page" id="<?php echo $page_element_id; ?>" data-page-type="list"  data-display-type="grid" data-page-url="<?php print_link($current_page); ?>">
+<section class="page ajax-page infinite-scroll" id="<?php echo $page_element_id; ?>" data-page-type="list"  data-display-type="grid" data-page-url="<?php print_link($current_page); ?>">
     <?php
     if( $show_header == true ){
     ?>
@@ -96,22 +96,13 @@ $show_pagination = $this->show_pagination;
                     <div class="col-md-12 comp-grid">
                         <?php $this :: display_page_errors(); ?>
                         <div  class=" animated fadeIn page-content">
-                            <div id="blogbanner-banner-records">
-                                <style>
-                                    .dark-skin{
-                                    background: linear-gradient(to bottom,rgba(0,0,0,0), rgba(0,0,0,0.9));
-                                    }
-                                </style>
+                            <div id="blogbanner-list_artical-records">
                                 <?php
                                 if(!empty($records)){
                                 ?>
-                                <div id="banner" class="carousel slide" data-ride="carousel">
-                                    <ol class="carousel-indicators">
-                                        <li data-target="#banner" data-slide-to="0" class="active"></li>
-                                        <li data-target="#banner" data-slide-to="1"></li>
-                                        <li data-target="#banner" data-slide-to="2"></li>
-                                    </ol>
-                                    <div class="carousel-inner page-data" id="page-data-<?php echo $page_element_id; ?>">
+                                <div id="page-report-body">
+                                    <?php Html::ajaxpage_spinner(); ?>
+                                    <div class="row sm-gutters page-data" id="page-data-<?php echo $page_element_id; ?>">
                                         <!--record-->
                                         <?php
                                         $counter = 0;
@@ -119,62 +110,57 @@ $show_pagination = $this->show_pagination;
                                         $rec_id = (!empty($data['id']) ? urlencode($data['id']) : null);
                                         $counter++;
                                         ?>
-                                        <div class="col-12 p-0 carousel-item <?php if($counter==1){ ?> active <?php } ?>">
-                                            <div class="col-12 p-0">
-                                                <!--page_img($imgsrc, $resizewidth = null, $resizeheight = null, $max = 1, $link = null, $class = null)-->
-                                                <div class="mb-2">  <?php Html :: page_img($data['img'],1800,400,1,"articles/view/$rec_id","img-holder"); ?>
-                                                </div>
-                                                <div class="col-12 p-5 dark-skin d-none d-md-flex align-items-end position-absolute" style="top:0px; bottom:0px">
-                                                    <a class="text-white text-captalize" href="<?php print_link("articles/view/$rec_id")?>">
-                                                        <h1 class="text-captalize bold"><?php echo $data['headline']; ?></h1>
-                                                        <hr style="border-color:white">
-                                                            <span class="bold text-captalize">Published At: <?php echo human_date($data['crt_date']); ?></span>
-                                                            <span class="bold text-captalize">Published by: <?php echo $data['publisher']; ?></span>
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                        <div class="col-lg-3 col-mb-4 col-6">
+                                            <div class="card md-3">
+                                                <div class="mb-2"> <?php Html :: page_img($data['img'],350,250,1,"articles/view/$rec_id","fluid"); ?></div>
+                                                <div class="mb-2">   <?php echo $data['headline']; ?></div>
                                             </div>
-                                            <?php 
+                                        </div>
+                                        <?php 
+                                        }
+                                        ?>
+                                        <!--endrecord-->
+                                    </div>
+                                    <div class="row sm-gutters search-data" id="search-data-<?php echo $page_element_id; ?>"></div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <?php
+                                if($show_footer == true){
+                                ?>
+                                <div class=" border-top mt-2">
+                                    <div class="row justify-content-center">    
+                                        <div class="col-md-auto">   
+                                        </div>
+                                        <div class="col">   
+                                            <?php
+                                            if($show_pagination == true){
+                                            ?>
+                                            <div class="text-center py-3">
+                                                <button  class="btn btn-light btn-load-more">
+                                                </button>
+                                            </div>
+                                            <?php
                                             }
                                             ?>
-                                            <!--endrecord-->
-                                        </div>
-                                        <a class="carousel-control-prev" href="#banner" data-slide="prev">
-                                            <i class="icon-arrow-left bold p-2 border rounded-circle"></i>
-                                        </a>
-                                        <a class="carousel-control-next" href="#banner" data-slide="next">
-                                            <i class="icon-arrow-right bold p-2 border rounded-circle"></i>
-                                        </a>
-                                        <div class="carousel-inner search-data" id="search-data-<?php echo $page_element_id; ?>"></div>
-                                        <div>
                                         </div>
                                     </div>
-                                    <?php
-                                    if($show_footer == true){
-                                    ?>
-                                    <div class=" border-top mt-2">
-                                        <div class="row justify-content-center">    
-                                            <div class="col-md-auto">   
-                                            </div>
-                                            <div class="col">   
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php
-                                    }
-                                    }
-                                    else{
-                                    ?>
-                                    <div class="text-muted  animated bounce p-3">
-                                        <h4><i class="icon-ban"></i> No record found</h4>
-                                    </div>
-                                    <?php
-                                    }
-                                    ?>
                                 </div>
+                                <?php
+                                }
+                                }
+                                else{
+                                ?>
+                                <div class="text-muted  animated bounce p-3">
+                                    <h4><i class="icon-ban"></i> No record found</h4>
+                                </div>
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
