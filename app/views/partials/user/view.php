@@ -45,10 +45,6 @@ $show_export_btn = $this->show_export_btn;
                             <table class="table table-hover table-borderless table-striped">
                                 <!-- Table Body Start -->
                                 <tbody class="page-data" id="page-data-<?php echo $page_element_id; ?>">
-                                    <tr  class="td-id">
-                                        <th class="title"> Id: </th>
-                                        <td class="value"> <?php echo $data['id']; ?></td>
-                                    </tr>
                                     <tr  class="td-username">
                                         <th class="title"> Username: </th>
                                         <td class="value">

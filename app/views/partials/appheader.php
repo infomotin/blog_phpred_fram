@@ -1,11 +1,12 @@
 <div id="topbar" class="navbar navbar-expand-md fixed-top navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?php print_link(HOME_PAGE) ?>">
-            <img class="img-responsive" src="<?php print_link(SITE_LOGO); ?>" /> <?php echo SITE_NAME ?>
-            </a>
+        <a class="navbar-brand " href="<?php print_link(HOME_PAGE) ?>">
+            <img class="img-responsive " src="<?php print_link(SITE_LOGO); ?>" /> <span class="text-capitalize"><?php echo SITE_NAME; ?></span>
+        </a>
             <?php 
             if(user_login_status() == true ){ 
             ?>
+            
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,7 +19,7 @@
                             <?php 
                             if(!empty(USER_PHOTO)){
                             ?>
-                            <img class="img-fluid" style="height:30px;" src="<?php print_link(set_img_src(USER_PHOTO,30,30)); ?>" />
+                            <img class="img-fluid" style="height:30px;" src="<?php print_link(set_img_src(USER_PHOTO,40,40)); ?>" />
                                 <?php
                                 }
                                 else{
@@ -27,7 +28,8 @@
                                 <?php
                                 }
                                 ?>
-                                <span>Hi <?php echo ucwords(USER_NAME); ?> !</span>
+                                <span>Hi, <?php echo ucwords(USER_NAME); ?> it`s</span>
+                                <span><?php echo ucwords(human_date(time_now())); ?></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <a class="dropdown-item" href="<?php print_link('account') ?>"><i class="icon-user"></i> My Account</a>

@@ -21,7 +21,7 @@ $show_export_btn = $this->show_export_btn;
         <div class="container">
             <div class="row ">
                 <div class="col ">
-                    <h4 class="record-title">View  Articles</h4>
+                    <h4 class="record-title"></h4>
                 </div>
             </div>
         </div>
@@ -47,29 +47,28 @@ $show_export_btn = $this->show_export_btn;
                                 <tbody class="page-data" id="page-data-<?php echo $page_element_id; ?>">
                                     <tr  class="td-headline">
                                         <th class="title"> Headline: </th>
-                                        <td class="value">
-                                            <span  data-value="<?php echo $data['headline']; ?>" 
-                                                data-pk="<?php echo $data['id'] ?>" 
-                                                data-url="<?php print_link("articles/editfield/" . urlencode($data['id'])); ?>" 
-                                                data-name="headline" 
-                                                data-title="Enter Headline" 
-                                                data-placement="left" 
-                                                data-toggle="click" 
-                                                data-type="text" 
-                                                data-mode="popover" 
-                                                data-showbuttons="left" 
-                                                class="is-editable" >
-                                                <?php echo $data['headline']; ?> 
-                                            </span>
-                                        </td>
+                                        <td class="value"><a href="<?php print_link("articles/index/headline/$data[headline]") ?>"><?php echo $data['headline']; ?></a></td>
                                     </tr>
                                     <tr  class="td-img">
                                         <th class="title"> Img: </th>
                                         <td class="value"><?php Html :: page_img($data['img'],400,400,1); ?></td>
                                     </tr>
                                     <tr  class="td-article">
-                                        <th class="title"> Article: <?php echo $data['headline']; ?> </th>
-                                        <td class="value"><?php print_r($data['article']); ?></td>
+                                        <th class="title"> Article: </th>
+                                        <td class="value">
+                                            <span  data-pk="<?php echo $data['id'] ?>" 
+                                                data-url="<?php print_link("articles/editfield/" . urlencode($data['id'])); ?>" 
+                                                data-name="article" 
+                                                data-title="Enter Article" 
+                                                data-placement="left" 
+                                                data-toggle="click" 
+                                                data-type="textarea" 
+                                                data-mode="popover" 
+                                                data-showbuttons="left" 
+                                                class="is-editable" >
+                                                <?php echo $data['article']; ?> 
+                                            </span>
+                                        </td>
                                     </tr>
                                     <tr  class="td-publisher">
                                         <th class="title"> Publisher: </th>
@@ -82,24 +81,6 @@ $show_export_btn = $this->show_export_btn;
                                     <tr  class="td-crt_date">
                                         <th class="title"> Crt Date: </th>
                                         <td class="value"> <?php echo $data['crt_date']; ?></td>
-                                    </tr>
-                                    <tr  class="td-upd_date">
-                                        <th class="title"> Upd Date: </th>
-                                        <td class="value">
-                                            <span  data-value="<?php echo $data['upd_date']; ?>" 
-                                                data-pk="<?php echo $data['id'] ?>" 
-                                                data-url="<?php print_link("articles/editfield/" . urlencode($data['id'])); ?>" 
-                                                data-name="upd_date" 
-                                                data-title="Enter Upd Date" 
-                                                data-placement="left" 
-                                                data-toggle="click" 
-                                                data-type="text" 
-                                                data-mode="popover" 
-                                                data-showbuttons="left" 
-                                                class="is-editable" >
-                                                <?php echo $data['upd_date']; ?> 
-                                            </span>
-                                        </td>
                                     </tr>
                                     <tr  class="td-tag">
                                         <th class="title"> Tag: </th>
