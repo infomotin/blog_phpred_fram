@@ -97,71 +97,129 @@ $show_pagination = $this->show_pagination;
                         <?php $this :: display_page_errors(); ?>
                         <div  class=" animated fadeIn page-content">
                             <div id="blogbanner-articale_view-records">
-                                <?php
-                                if(!empty($records)){
-                                ?>
-                                <div id="page-report-body">
-                                    <?php Html::ajaxpage_spinner(); ?>
-                                    <div class="row sm-gutters page-data" id="page-data-<?php echo $page_element_id; ?>">
-                                        <!--record-->
+                                <div id="page-report-body" class="table-responsive">
+                                    <table class="table  table-striped table-sm text-left">
+                                        <thead class="table-header bg-light">
+                                            <tr>
+                                                <th class="td-sno">#</th>
+                                                <th  class="td-id"> Id</th>
+                                                <th  class="td-headline"> Headline</th>
+                                                <th  class="td-img"> Img</th>
+                                                <th  class="td-article"> Article</th>
+                                                <th  class="td-publisher"> Publisher</th>
+                                                <th  class="td-crt_date"> Crt Date</th>
+                                                <th  class="td-upd_date"> Upd Date</th>
+                                                <th  class="td-tag"> Tag</th>
+                                                <th class="td-btn"></th>
+                                            </tr>
+                                        </thead>
                                         <?php
-                                        $counter = 0;
-                                        foreach($records as $data){
-                                        $rec_id = (!empty($data['id']) ? urlencode($data['id']) : null);
-                                        $counter++;
+                                        if(!empty($records)){
                                         ?>
-                                        <div class="col-sm-12">
-                                            <div class="bg-light p-2 mb-3 d-flex">
-                                                <div class="mb-2">  <?php Html :: page_img($data['img'],50,50,1); ?></div>
-                                                <div class="mb-2">   <?php echo $data['headline']; ?></div>
-                                            </div>
-                                        </div>
-                                        <?php 
+                                        <tbody class="page-data" id="page-data-<?php echo $page_element_id; ?>">
+                                            <!--record-->
+                                            <?php
+                                            $counter = 0;
+                                            foreach($records as $data){
+                                            $rec_id = (!empty($data['id']) ? urlencode($data['id']) : null);
+                                            $counter++;
+                                            ?>
+                                            <tr>
+                                                <th class="td-sno"><?php echo $counter; ?></th>
+                                                <td class="td-id"><a href="<?php print_link("blogbanner/view/$data[id]") ?>"><?php echo $data['id']; ?></a></td>
+                                                <td class="td-headline"> <?php echo $data['headline']; ?></td>
+                                                <td class="td-img"> <?php echo $data['img']; ?></td>
+                                                <td class="td-article"> <?php echo $data['article']; ?></td>
+                                                <td class="td-publisher"> <?php echo $data['publisher']; ?></td>
+                                                <td class="td-crt_date"> <?php echo $data['crt_date']; ?></td>
+                                                <td class="td-upd_date"> <?php echo $data['upd_date']; ?></td>
+                                                <td class="td-tag"> <?php echo $data['tag']; ?></td>
+                                                <th class="td-btn">
+                                                    <a class="btn btn-sm btn-success has-tooltip" title="View Record" href="<?php print_link("blogbanner/view/$rec_id"); ?>">
+                                                        <i class="icon-eye"></i> View
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                            <?php 
+                                            }
+                                            ?>
+                                            <!--endrecord-->
+                                        </tbody>
+                                        <tbody class="search-data" id="search-data-<?php echo $page_element_id; ?>"></tbody>
+                                        <?php
                                         }
                                         ?>
-                                        <!--endrecord-->
-                                    </div>
-                                    <div class="row sm-gutters search-data" id="search-data-<?php echo $page_element_id; ?>"></div>
-                                    <div>
-                                    </div>
+                                    </table>
+                                    <?php 
+                                    if(empty($records)){
+                                    ?>
+                                    <h4 class="bg-light text-center border-top text-muted animated bounce  p-3">
+                                        <i class="icon-ban"></i> No record found
+                                    </h4>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
                                 <?php
-                                if($show_footer == true){
+                                if( $show_footer && !empty($records)){
                                 ?>
                                 <div class=" border-top mt-2">
                                     <div class="row justify-content-center">    
-                                        <div class="col-md-auto">   
-                                        </div>
-                                        <div class="col">   
-                                            <?php
-                                            if($show_pagination == true){
-                                            ?>
-                                            <div class="text-center py-3">
-                                                <button  class="btn btn-light btn-load-more">
-                                                    Load More...
-                                                </button>
+                                        <div class="col-md-auto justify-content-center">    
+                                            <div class="p-3 d-flex justify-content-between">    
+                                                <div class="dropup export-btn-holder mx-1">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="icon-printer"></i> Export
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <?php $export_print_link = $this->set_current_page_link(array('format' => 'print')); ?>
+                                                        <a class="dropdown-item export-link-btn" data-format="print" href="<?php print_link($export_print_link); ?>" target="_blank">
+                                                            <img src="<?php print_link('assets/images/print.png') ?>" class="mr-2" /> PRINT
+                                                            </a>
+                                                            <?php $export_pdf_link = $this->set_current_page_link(array('format' => 'pdf')); ?>
+                                                            <a class="dropdown-item export-link-btn" data-format="pdf" href="<?php print_link($export_pdf_link); ?>" target="_blank">
+                                                                <img src="<?php print_link('assets/images/pdf.png') ?>" class="mr-2" /> PDF
+                                                                </a>
+                                                                <?php $export_word_link = $this->set_current_page_link(array('format' => 'word')); ?>
+                                                                <a class="dropdown-item export-link-btn" data-format="word" href="<?php print_link($export_word_link); ?>" target="_blank">
+                                                                    <img src="<?php print_link('assets/images/doc.png') ?>" class="mr-2" /> WORD
+                                                                    </a>
+                                                                    <?php $export_csv_link = $this->set_current_page_link(array('format' => 'csv')); ?>
+                                                                    <a class="dropdown-item export-link-btn" data-format="csv" href="<?php print_link($export_csv_link); ?>" target="_blank">
+                                                                        <img src="<?php print_link('assets/images/csv.png') ?>" class="mr-2" /> CSV
+                                                                        </a>
+                                                                        <?php $export_excel_link = $this->set_current_page_link(array('format' => 'excel')); ?>
+                                                                        <a class="dropdown-item export-link-btn" data-format="excel" href="<?php print_link($export_excel_link); ?>" target="_blank">
+                                                                            <img src="<?php print_link('assets/images/xsl.png') ?>" class="mr-2" /> EXCEL
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">   
+                                                                <?php
+                                                                if($show_pagination == true){
+                                                                $pager = new Pagination($total_records, $record_count);
+                                                                $pager->route = $this->route;
+                                                                $pager->show_page_count = true;
+                                                                $pager->show_record_count = true;
+                                                                $pager->show_page_limit =true;
+                                                                $pager->limit_count = $this->limit_count;
+                                                                $pager->show_page_number_list = true;
+                                                                $pager->pager_link_range=5;
+                                                                $pager->render();
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </div>
                                             </div>
-                                            <?php
-                                            }
-                                            ?>
                                         </div>
                                     </div>
                                 </div>
-                                <?php
-                                }
-                                }
-                                else{
-                                ?>
-                                <div class="text-muted  animated bounce p-3">
-                                    <h4><i class="icon-ban"></i> </h4>
-                                </div>
-                                <?php
-                                }
-                                ?>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                        </section>

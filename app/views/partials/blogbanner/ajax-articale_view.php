@@ -16,12 +16,22 @@ foreach($records as $data){
 $rec_id = (!empty($data['id']) ? urlencode($data['id']) : null);
 $counter++;
 ?>
-<div class="col-sm-12">
-    <div class="bg-light p-2 mb-3 d-flex">
-        <div class="mb-2">  <?php Html :: page_img($data['img'],50,50,1); ?></div>
-        <div class="mb-2">   <?php echo $data['headline']; ?></div>
-    </div>
-</div>
+<tr>
+    <th class="td-sno"><?php echo $counter; ?></th>
+    <td class="td-id"><a href="<?php print_link("blogbanner/view/$data[id]") ?>"><?php echo $data['id']; ?></a></td>
+    <td class="td-headline"> <?php echo $data['headline']; ?></td>
+    <td class="td-img"> <?php echo $data['img']; ?></td>
+    <td class="td-article"> <?php echo $data['article']; ?></td>
+    <td class="td-publisher"> <?php echo $data['publisher']; ?></td>
+    <td class="td-crt_date"> <?php echo $data['crt_date']; ?></td>
+    <td class="td-upd_date"> <?php echo $data['upd_date']; ?></td>
+    <td class="td-tag"> <?php echo $data['tag']; ?></td>
+    <th class="td-btn">
+        <a class="btn btn-sm btn-success has-tooltip" title="View Record" href="<?php print_link("blogbanner/view/$rec_id"); ?>">
+            <i class="icon-eye"></i> View
+        </a>
+    </th>
+</tr>
 <?php 
 }
 ?>
