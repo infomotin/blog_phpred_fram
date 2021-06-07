@@ -139,7 +139,6 @@
 			Html ::  page_js('selectize.min.js');
 			Html ::  page_js('bootstrap-editable.js');
 			Html ::  page_js('dropzone.min.js');
-			Html::page_js('jquery.endless-scroll.js');
 			Html ::  page_js('plugins.js'); //boostrapswitch, passwordStrength, twbs-pagination, blueimp-gallery,
 			Html ::  page_js('plugins-init.js');
 			Html ::  page_js('page-scripts.js');

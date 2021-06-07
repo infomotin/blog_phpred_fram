@@ -201,101 +201,26 @@ class BlogbannerController extends SecureController{
      * @param $fieldvalue (filter field value)
      * @return BaseView
      */
-	function list_artical($fieldname = null , $fieldvalue = null){
-		$request = $this->request;
-		$db = $this->GetModel();
-		$tablename = $this->tablename;
-		$fields = array("blogbanner.id", 
-			"blogbanner.headline", 
-			"blogbanner.img", 
-			"blogbanner.article", 
-			"blogbanner.publisher", 
-			"user.username AS user_username", 
-			"blogbanner.crt_date", 
-			"blogbanner.upd_date", 
-			"blogbanner.tag");
-		$pagination = $this->get_pagination(8); // get current pagination e.g array(page_number, page_limit)
-		//search table record
-		if(!empty($request->search)){
-			$text = trim($request->search); 
-			$search_condition = "(
-				blogbanner.id LIKE ? OR 
-				blogbanner.headline LIKE ? OR 
-				blogbanner.img LIKE ? OR 
-				blogbanner.article LIKE ? OR 
-				blogbanner.publisher LIKE ? OR 
-				blogbanner.crt_date LIKE ? OR 
-				blogbanner.upd_date LIKE ? OR 
-				blogbanner.tag LIKE ?
-			)";
-			$search_params = array(
-				"%$text%","%$text%","%$text%","%$text%","%$text%","%$text%","%$text%","%$text%"
-			);
-			//setting search conditions
-			$db->where($search_condition, $search_params);
-			 //template to use when ajax search
-			$this->view->search_template = "blogbanner/search.php";
-		}
-		$db->join("user", "blogbanner.publisher = user.id", "INNER");
-		if(!empty($request->orderby)){
-			$orderby = $request->orderby;
-			$ordertype = (!empty($request->ordertype) ? $request->ordertype : ORDER_TYPE);
-			$db->orderBy($orderby, $ordertype);
-		}
-		else{
-			$db->orderBy("blogbanner.id", ORDER_TYPE);
-		}
-		if($fieldname){
-			$db->where($fieldname , $fieldvalue); //filter by a single field name
-		}
-		$tc = $db->withTotalCount();
-		$records = $db->get($tablename, $pagination, $fields);
-		$records_count = count($records);
-		$total_records = intval($tc->totalCount);
-		$page_limit = $pagination[1];
-		$total_pages = ceil($total_records / $page_limit);
-		$data = new stdClass;
-		$data->records = $records;
-		$data->record_count = $records_count;
-		$data->total_records = $total_records;
-		$data->total_page = $total_pages;
-		if($db->getLastError()){
-			$this->set_page_error();
-		}
-		$this->view->report_filename = date('Y-m-d') . '-' . $page_title;
-		$this->view->report_title = $page_title;
-		$this->view->report_layout = "report_layout.php";
-		$this->view->report_paper_size = "A4";
-		$this->view->report_orientation = "portrait";
-		$view_name = (is_ajax() ? "blogbanner/ajax-list_artical.php" : "blogbanner/list_artical.php");
-		$this->render_view($view_name, $data);
-	}
-	/**
-     * List page records
-     * @param $fieldname (filter record by a field) 
-     * @param $fieldvalue (filter field value)
-     * @return BaseView
-     */
-	function sm_list2($fieldname = null , $fieldvalue = null){
+	function articale_view($fieldname = null , $fieldvalue = null){
 		$request = $this->request;
 		$db = $this->GetModel();
 		$tablename = $this->tablename;
 		$fields = array("id", 
-			"headline", 
 			"img", 
+			"headline", 
 			"article", 
 			"publisher", 
 			"crt_date", 
 			"upd_date", 
 			"tag");
-		$pagination = $this->get_pagination(3); // get current pagination e.g array(page_number, page_limit)
+		$pagination = $this->get_pagination(MAX_RECORD_COUNT); // get current pagination e.g array(page_number, page_limit)
 		//search table record
 		if(!empty($request->search)){
 			$text = trim($request->search); 
 			$search_condition = "(
 				blogbanner.id LIKE ? OR 
-				blogbanner.headline LIKE ? OR 
 				blogbanner.img LIKE ? OR 
+				blogbanner.headline LIKE ? OR 
 				blogbanner.article LIKE ? OR 
 				blogbanner.publisher LIKE ? OR 
 				blogbanner.crt_date LIKE ? OR 
@@ -341,7 +266,7 @@ class BlogbannerController extends SecureController{
 		$this->view->report_layout = "report_layout.php";
 		$this->view->report_paper_size = "A4";
 		$this->view->report_orientation = "portrait";
-		$view_name = (is_ajax() ? "blogbanner/ajax-sm_list2.php" : "blogbanner/sm_list2.php");
+		$view_name = (is_ajax() ? "blogbanner/ajax-articale_view.php" : "blogbanner/articale_view.php");
 		$this->render_view($view_name, $data);
 	}
 }
